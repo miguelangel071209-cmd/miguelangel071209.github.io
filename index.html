@@ -30,14 +30,6 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 </style></head><body><main>
 <h1>✨ Content Studio</h1>
 <p class="s">Tu marca guardada + prompts listos para pegar en cualquier IA.</p>
-<div id="lg">
-<div class="card hide" id="lgc"><h2>☁️ Entrar con tu cuenta de Claude</h2><p class="note" style="margin:0">Tus datos se guardan en tu cuenta y los verás desde cualquier dispositivo.</p><button class="btn" id="lgcb">Entrar con mi cuenta</button><p class="note" id="lge" style="margin:8px 0 0"></p></div>
-<div class="card"><h2>👤 Perfiles en este dispositivo</h2><div id="plist"></div>
-<div id="pcard" class="hide"><label id="pl">PIN</label><input id="pi" type="password" inputmode="numeric" placeholder="PIN"><button class="btn" id="pb">Entrar</button><p class="note" id="pie" style="margin:8px 0 0"></p></div></div>
-<div class="card"><h2>➕ Crear perfil nuevo</h2><label>Nombre</label><input id="pn" placeholder="Ej: Laura Fit"><label>PIN (opcional, mín. 4 dígitos)</label><input id="pp" type="password" inputmode="numeric" placeholder="Para proteger tu perfil"><button class="btn" id="pc">Crear y entrar</button><p class="note" id="pe" style="margin:8px 0 0">El PIN solo evita accesos casuales en este dispositivo.</p></div>
-</div>
-<div id="app" class="hide">
-<div class="note" style="display:flex;justify-content:space-between;align-items:center"><span id="wn"></span><a href="#" id="lo" style="color:var(--ac);font-weight:600">Cerrar sesión</a></div>
 <nav><button id="n1" class="on">Mi marca</button><button id="n2">Crear contenido</button><button id="n3">Novedades IG</button></nav>
 
 <section id="v1">
@@ -54,6 +46,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 
 <section id="v2" class="hide">
 <div class="grid" style="margin-top:4px"><button class="mt on" id="m1">💡 Ideas para publicar</button><button class="mt" id="m2">🧰 Banco y planificación</button><button class="mt" id="m3" style="grid-column:span 2">✍️ Ya tengo la idea</button></div>
+<label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:12px 0 0"><input type="checkbox" id="vir" style="width:auto" checked> 🔥 Analizar primero los patrones virales actuales de Instagram</label>
 <div id="p1">
 <div class="card"><h2>1. ¿Qué quieres crear?</h2><div class="grid" id="types"></div></div>
 <div class="card"><h2>2. Detalles (opcional)</h2>
@@ -72,7 +65,19 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 <div id="mesW" class="hide"><label>Mes a planificar</label><select id="mes"></select>
 <label>Vídeos por semana</label><select id="vps"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>7</option></select>
 <label>Objetivo del mes</label><input id="omes" placeholder="Ej: lanzar mi programa, ganar 2.000 seguidores…"></div>
-<label>Tema o enfoque (opcional)</label><input id="tema2" placeholder="Ej: solo ventas, temporada, un servicio concreto…">
+<div id="temaW"><label>Tema o enfoque (opcional)</label><input id="tema2" placeholder="Ej: solo ventas, temporada, un servicio concreto…"></div>
+<div id="dlW" class="hide"><p class="note" style="margin:0">Elige o escribe un punto de dolor de tu cliente ideal y se creará contenido que conecte directamente con ese problema.</p>
+<div id="dlc" class="grid" style="margin-top:8px"></div>
+<label>¿Cuál es el punto de dolor o frustración de tu cliente?</label><textarea id="dli" placeholder="Escríbelo con las palabras exactas de tu cliente. Ej: «Publico todos los días y nadie me ve», «No sé qué publicar y pierdo 2 horas pensando»"></textarea>
+<p class="note">Si lo dejas vacío, la IA elegirá el dolor más fuerte según tu marca.</p>
+<label>¿Qué formato quieres?</label><select id="dlf"><option>Reel (guion completo)</option><option>Micro reel (texto en pantalla + b-roll)</option><option>Carrusel</option><option>Publicación estática</option><option>Secuencia de historias</option></select></div>
+<div id="pzW" class="hide"><label>¿De qué idea quieres sacar las piezas? *</label><textarea id="pzi" placeholder="Escribe el tema, lo que tu cliente quiere conseguir o solucionar. Ej: cómo conseguir más volumen en el pelo"></textarea>
+<label>Elige hasta 5 formas de contarla <span id="pzn" class="note"></span></label><div class="grid" id="pzc"></div>
+<p class="note">Si eliges menos de cinco, la IA completa hasta cinco con este reparto: 3 para que te descubran, 1 para que confíen en ti y 1 para que te compren.</p>
+<label>¿Qué quieres vender con esta idea?</label><input id="pzv" placeholder="Si lo dejas vacío, usará lo que vendes según tu marca">
+<label>¿Tienes un caso o historia real que encaje? (opcional)</label><textarea id="pzh" placeholder="Si no tienes, la IA dejará huecos [entre corchetes] para que pongas tus datos"></textarea>
+<label>¿Sales hablando a cámara?</label><select id="pzcam"><option>Sí, hablando a cámara</option><option>No, solo b-roll</option></select>
+<p class="note">💡 Graba las cinco el mismo día y publícalas espaciadas (una por semana, más o menos) entre el resto de tu contenido.</p></div>
 <button class="btn" id="gen2">Generar prompt</button></div>
 </div>
 <div id="p3" class="hide">
@@ -102,7 +107,6 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 <div class="card hide" id="nout"><h2>Tu prompt</h2><pre id="npre"></pre><button class="btn" id="ncopy">Copiar prompt</button></div>
 <div id="nlist"></div>
 </section>
-</div>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -112,13 +116,12 @@ const S=[
 ["Contenido",[["contenido","Contenido que haces actualmente","area","Formatos, temas, series…"],["pilares","Pilares de contenido","area","Educativo, personal, ventas, entretenimiento…"],["mostrar","Qué quieres mostrar al público","area",""],["formatosFav","Formatos que dominas o prefieres","text","A cámara, voz en off, texto en pantalla…"],["recursos","Recursos disponibles para grabar","text","Móvil, estudio, equipo, local, productos…"],["frecuencia","Frecuencia de publicación","text","Ej: 4 reels y 2 carruseles/semana"]]],
 ["Audiencia",[["cliente","Cliente / público ideal","area","Quiénes son, edad, situación"],["problemas","Problemas y dolores principales","area",""],["deseos","Deseos y objetivos de tu audiencia","area",""],["objeciones","Objeciones que ponen para comprar","area",""],["dondeEsta","Dónde consumen contenido / qué les gusta","text",""]]],
 ["Negocio",[["servicios","Servicios o productos que ofreces","area",""],["precios","Rango de precios / ticket","text",""],["objetivo","Objetivo principal en redes","text","Ventas, comunidad, marca personal…"],["cta","Llamada a la acción habitual","text","Escríbeme por DM, reserva llamada, link en bio…"],["leadMagnets","Recursos gratuitos que ya tienes","area","Guías, plantillas, webinars…"],["referentes","Referentes o competencia","text",""],["extra","Algo más que la IA deba saber","area",""]]]];
-const T=[["Reel","vídeo vertical corto 15-60s"],["Carrusel","slides deslizables"],["Historia","secuencia de stories"],["Post de imagen","foto única + caption"],["TikTok","vídeo corto con tendencia"],["YouTube Short","vídeo vertical < 60s"],["Vídeo YouTube","vídeo largo con guion"],["Newsletter","email a suscriptores"],["Encuesta / Q&A","interacción con la audiencia"],["Colaboración","con otra marca/creador"],["Recurso gratis","se crea el recurso completo"],["Podcast / Audio","episodio o clip"]];
-const H={"Reel":"Reel de Instagram (vertical 9:16, 15-60s)","Carrusel":"Carrusel (indica nº de slides y el texto exacto de cada una)","Historia":"Secuencia de Historias (indica cada story, sticker o interacción)","Post de imagen":"Post de imagen única (indica qué foto/diseño y texto en imagen)","TikTok":"TikTok (vertical, ritmo rápido, sonido/tendencia sugerida)","YouTube Short":"YouTube Short (vertical <60s, buen loop)","Vídeo YouTube":"Vídeo largo de YouTube (título, miniatura, guion por secciones)","Newsletter":"Newsletter por email (asunto, preheader y cuerpo)","Encuesta / Q&A":"Contenido interactivo de encuesta o preguntas y respuestas","Colaboración":"Colaboración con otro creador o marca (formato, reparto y propuesta)","Recurso gratis":"Lead magnet completo (qué es, contenido, formato y cómo promocionarlo)","Podcast / Audio":"Episodio o clip de podcast (guion, estructura, puntos clave)"};
+const T=[["Reel","vídeo vertical corto 15-60s"],["Reel storytelling","historia que engancha"],["B-roll","planos de apoyo para tus vídeos"],["Carrusel","slides deslizables"],["Historia","secuencia de stories"],["Post de imagen","foto única + caption"],["TikTok","vídeo corto con tendencia"],["YouTube Short","vídeo vertical < 60s"],["Vídeo YouTube","vídeo largo con guion"],["Newsletter","email a suscriptores"],["Encuesta / Q&A","interacción con la audiencia"],["Colaboración","con otra marca/creador"],["Recurso gratis","se crea el recurso completo"],["Podcast / Audio","episodio o clip"]];
+const H={"Reel storytelling":"Reel storytelling (historia con estructura narrativa: contexto, conflicto, giro, resolución y lección, vertical 9:16, 30-60s)","B-roll":"B-roll (planos de apoyo que cubren y refuerzan el guion de un vídeo; incluye lista de planos para grabar)","Reel":"Reel de Instagram (vertical 9:16, 15-60s)","Carrusel":"Carrusel (indica nº de slides y el texto exacto de cada una)","Historia":"Secuencia de Historias (indica cada story, sticker o interacción)","Post de imagen":"Post de imagen única (indica qué foto/diseño y texto en imagen)","TikTok":"TikTok (vertical, ritmo rápido, sonido/tendencia sugerida)","YouTube Short":"YouTube Short (vertical <60s, buen loop)","Vídeo YouTube":"Vídeo largo de YouTube (título, miniatura, guion por secciones)","Newsletter":"Newsletter por email (asunto, preheader y cuerpo)","Encuesta / Q&A":"Contenido interactivo de encuesta o preguntas y respuestas","Colaboración":"Colaboración con otro creador o marca (formato, reparto y propuesta)","Recurso gratis":"Lead magnet completo (qué es, contenido, formato y cómo promocionarlo)","Podcast / Audio":"Episodio o clip de podcast (guion, estructura, puntos clave)"};
 let D={},sel="Reel";
 const $=id=>document.getElementById(id);
-let sm="local",KEY="",cdoc=null,tmr=0,CL=null,pend=null;
-const cw=async()=>{tmr=0;try{await cdoc.set({d:JSON.stringify(D),t:Date.now()})}catch(e){}};
-const save=()=>{if(sm=="cloud"){clearTimeout(tmr);tmr=setTimeout(cw,700)}else{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}};
+let KEY="cs_brand";
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
 const all=S.flatMap(s=>s[1]);
 function prog(){const n=all.filter(f=>(D[f[0]]||"").trim()).length,p=Math.round(n/all.length*100);$("bar").style.width=p+"%";$("pct").textContent="Perfil completado: "+p+"% — cuanta más info, mejores ideas."}
 function build(){$("form").innerHTML=S.map(([t,fs])=>`<div class="card"><h2>${t}</h2>${fs.map(([k,l,ty,ph])=>`<label for="f_${k}">${l}</label>${ty=="area"?`<textarea id="f_${k}" data-k="${k}" placeholder="${ph}"></textarea>`:`<input id="f_${k}" data-k="${k}" placeholder="${ph}">`}`).join("")}</div>`).join("");
@@ -155,7 +158,15 @@ Entrega SOLO el recurso gratuito terminado, listo para dárselo a mi audiencia. 
 - Responde en el idioma de la marca.`;
 $("pre").textContent=pr;$("out").classList.remove("hide");$("out").scrollIntoView({behavior:"smooth"});return}
 const vid=["Reel","TikTok","YouTube Short","Vídeo YouTube","Podcast / Audio","Colaboración"].includes(sel);
-const det=vid?`Entrégalo como una TABLA por tramos de tiempo (ej: 0-3s, 3-8s, 8-15s… hasta el final; en vídeos largos usa tramos de minutos). Cada fila con estas columnas:
+const det=sel=="B-roll"?`Entrégalo como una LISTA DE PLANOS (shot list) para grabar, en TABLA con una fila por plano y columnas:
+   - **Nº y parte del guion que cubre** (qué frase o momento acompaña)
+   - **Plano**: tipo (detalle, medio, general, POV, cenital…), ángulo y movimiento de cámara
+   - **Qué grabar exactamente**: acción, objeto o escena, y cómo ponerlo
+   - **Duración en pantalla** (en segundos) y velocidad (normal, cámara lenta, time-lapse)
+   - **Texto en pantalla, transición o efecto** recomendado
+   Incluye mínimo 10-15 planos relacionados con el nicho y los servicios de la marca, ordenados por el guion. Añade: 5 planos comodín reutilizables para cualquier vídeo, consejos de luz y estabilidad con el móvil, y cómo organizar la sesión de grabación en bloque para hacerlo todo en menos de 30 minutos. Incluye también el guion de voz en off o texto principal que ese b-roll acompaña, por tramos de segundos.`:
+sel=="Reel storytelling"?`Entrégalo con estructura narrativa en TABLA por tramos de segundos (0-3s, 3-10s…) y columnas: bloque narrativo | lo que dice (guion literal, con emociones y pausas marcadas) | lo que se ve (plano y acción) | texto en pantalla | audio y edición. Los bloques narrativos son: 1) gancho que abre un bucle de curiosidad, 2) contexto y personaje (la marca o el cliente), 3) conflicto o problema real, 4) giro o punto de inflexión, 5) resolución con resultado concreto, 6) lección aplicable a la audiencia, 7) CTA natural. Usa una historia real o verosímil basada en el perfil de la marca, indica en qué momento retener con un re-gancho y cómo conectar la lección con los servicios de la marca sin sonar a anuncio.`:
+vid?`Entrégalo como una TABLA por tramos de tiempo (ej: 0-3s, 3-8s, 8-15s… hasta el final; en vídeos largos usa tramos de minutos). Cada fila con estas columnas:
    - **Tramo (segundos)**
    - **Lo que dice (guion literal)**: palabra por palabra, en el tono de la marca
    - **Lo que se ve (plano y acción)**: encuadre, movimiento, gestos, escenario, cortes
@@ -171,6 +182,8 @@ const p=`Actúa como un estratega de contenido y social media manager con más d
 
 # PERFIL DE LA MARCA
 ${L}
+
+${VIR()}
 
 # TAREA
 Crea ${n} ${n=="1"?"idea":"ideas"} originales de: ${H[sel]}.
@@ -226,12 +239,12 @@ if(!k.length){st("No encontré datos de marca en ese PDF.");return}
 k.forEach(x=>D[x]=r[x]);save();build();st("✓ Importados "+k.length+" campos. Revisa y ajusta lo que quieras.")}
 catch(x){st("No se pudo leer el PDF.")}};
 
-const Q={hooks:["Banco de hooks","ganchos listos para usar",[10,20,30,50],20],ideas:["Banco de ideas","ideas organizadas por pilar",[20,30,50],30],cal:["Calendario mensual","vídeos del mes organizados",null,0],pat:["Patrones virales","estructuras que funcionan",[5,8,10],8]};
+const Q={hooks:["Banco de hooks","ganchos listos para usar",[10,20,30,50],20],ideas:["Banco de ideas","ideas organizadas por pilar",[20,30,50],30],cal:["Calendario mensual","vídeos del mes organizados",null,0],pat:["Patrones virales","estructuras que funcionan",[5,8,10],8],piezas:["Una idea, varias piezas","1 idea → 5 reels con ángulos distintos",null,0],dolor:["Contenido desde puntos de dolor","conecta con la frustración de tu cliente",null,0]};
 let tool="hooks";
 function brandL(){return S.map(([t,fs])=>{const r=fs.filter(f=>(D[f[0]]||"").trim()).map(f=>`- ${f[1]}: ${D[f[0]].trim()}`);return r.length?`## ${t.toUpperCase()}\n${r.join("\n")}`:""}).filter(Boolean).join("\n\n")}
 function tl(){$("tools").innerHTML=Object.entries(Q).map(([k,v])=>`<button class="tt ${k==tool?"on":""}" data-k="${k}">${v[0]}<small>${v[1]}</small></button>`).join("");
 document.querySelectorAll("#tools .tt").forEach(b=>b.onclick=()=>{tool=b.dataset.k;tl()});
-const q=Q[tool];$("cantW").classList.toggle("hide",!q[2]);$("mesW").classList.toggle("hide",tool!="cal");
+const q=Q[tool];$("cantW").classList.toggle("hide",!q[2]);$("mesW").classList.toggle("hide",tool!="cal");$("pzW").classList.toggle("hide",tool!="piezas");$("temaW").classList.toggle("hide",tool=="piezas"||tool=="dolor");$("dlW").classList.toggle("hide",tool!="dolor");
 if(q[2])$("cant").innerHTML=q[2].map(n=>`<option ${n==q[3]?"selected":""}>${n}</option>`).join("");$("out").classList.add("hide")}
 (function(){const n=new Date();$("mes").innerHTML=Array.from({length:12},(_,i)=>{const d=new Date(n.getFullYear(),n.getMonth()+i,1);return `<option value="${d.getFullYear()}-${d.getMonth()}">${d.toLocaleDateString("es-ES",{month:"long",year:"numeric"})}</option>`}).join("")})();
 function mode(i){[1,2,3].forEach(k=>{$("p"+k).classList.toggle("hide",i!=k);$("m"+k).classList.toggle("on",i==k)});$("out").classList.add("hide")}
@@ -239,7 +252,59 @@ $("m1").onclick=()=>mode(1);$("m2").onclick=()=>mode(2);
 $("gen2").onclick=()=>{
 if(!all.filter(f=>(D[f[0]]||"").trim()).length){alert("Primero completa algunos datos en 'Mi marca'.");show(1);return}
 const L=brandL(),n=$("cant").value,tm=$("tema2").value.trim(),foco=tm?`\nEnfoque pedido: ${tm}.`:"";let T="";
-if(tool=="hooks")T=`Crea un BANCO DE ${n} HOOKS (ganchos) para vídeos y contenido de esta marca.${foco}
+if(tool=="dolor"){const dv=$("dli").value.trim(),fm=$("dlf").value;
+const DV={"Reel (guion completo)":"Guion completo en TABLA por tramos de segundos (0-3s, 3-8s…) con columnas: lo que dice (literal) | lo que se ve (plano y acción) | texto en pantalla | edición y audio.","Micro reel (texto en pantalla + b-roll)":"Micro reel de 7-15 segundos sin hablar a cámara. TABLA por tramos de 1-3 segundos con columnas: texto en pantalla (literal) | plano b-roll a grabar | transición o efecto | audio. Incluye cierre en bucle.","Carrusel":"Carrusel slide por slide (portada, desarrollo y cierre): titular exacto, texto de apoyo, elementos visuales y cómo invitar a deslizar a la siguiente slide.","Publicación estática":"Publicación de imagen única: texto exacto sobre la imagen, descripción del diseño (composición, colores, tipografía) y caption completo.","Secuencia de historias":"Secuencia de Stories (nº de story y duración): lo que se dice o se muestra, texto en pantalla exacto, sticker o interacción (encuesta, caja de preguntas, quiz) y transición a la siguiente."};
+T=`Crea contenido que conecte directamente con un PUNTO DE DOLOR de mi cliente ideal. Usa las palabras y emociones reales de mi cliente, no lenguaje de marketing.
+
+## PUNTO DE DOLOR O FRUSTRACIÓN
+${dv||"No he indicado uno: elige tú el punto de dolor más fuerte de mi cliente ideal a partir de mi perfil (problemas, deseos y objeciones)."}
+
+## FORMATO
+${fm}
+
+## ESTRUCTURA A SEGUIR
+1. **Gancho** que nombra el dolor con las palabras del cliente.
+2. **Empatía**: que sienta que lo entiendes, sin dramatizar ni manipular.
+3. **Reencuadre**: la causa real del problema, que casi nadie le explica.
+4. **Solución**: pasos o enfoque claro, basado en cómo trabaja mi marca.
+5. **Prueba**: caso, resultado o ejemplo (si no tengo datos, deja huecos [entre corchetes]; no inventes cifras).
+6. **CTA** natural hacia mis servicios.
+
+## ENTREGA
+${DV[fm]}
+Añade también: 3 hooks alternativos, caption con CTA y un recurso gratuito relacionado con ese dolor.`}
+else if(tool=="piezas"){const idea=$("pzi").value.trim();if(!idea){alert("Escribe la idea de la que quieres sacar las piezas.");return}
+const ch=[...PS].map(k=>AN[k]),cam=$("pzcam").selectedIndex==0,vd=$("pzv").value.trim(),hi=$("pzh").value.trim();
+T=`A partir de UNA sola idea, crea 5 reels distintos, cada uno con un ángulo diferente, para cubrir el mes con una única sesión de grabación. Mi audiencia debe ver la misma idea desde cinco ángulos sin sensación de repetición.
+
+## IDEA
+${idea}
+
+## QUÉ QUIERO VENDER
+${vd||"Lo que vende mi marca según su perfil (servicios y productos)."}
+
+## CASO O HISTORIA REAL
+${hi||"No tengo uno: deja huecos entre [corchetes] (nombre, resultado, plazos…) para que yo ponga mis datos reales. No inventes casos ni cifras."}
+
+## FORMATO DE GRABACIÓN
+${cam?"Salgo hablando a cámara: escribe el guion hablado literal y adapta los planos a una persona hablando.":"No salgo hablando a cámara: solo b-roll con texto en pantalla (y voz en off opcional). Indica qué planos grabar en cada tramo."}
+
+## ÁNGULOS ELEGIDOS
+${ch.length?ch.map(x=>"- "+x).join("\n"):"No he elegido ninguno: elige tú los cinco más adecuados para mi marca."}
+Reparto objetivo de las 5 piezas: 3 para que me descubran, 1 para que confíen en mí y 1 para que me compren. Respeta primero los ángulos elegidos y completa los que falten hasta 5 siguiendo ese reparto (puedes usar ángulos de guardado, como tutorial o checklist, si encajan).
+
+## ENTREGA (para cada una de las 5 piezas)
+1. **Ángulo y objetivo** (descubrir, guardar, confianza o compra).
+2. **Hook**: 3 opciones para los primeros 3 segundos.
+3. **Guion en TABLA por tramos de segundos** con columnas: ${cam?"lo que dice (literal) | lo que se ve | texto en pantalla | edición y audio":"texto en pantalla | plano b-roll a grabar | voz en off (opcional) | edición y audio"}.
+4. **Caption** con CTA hacia lo que quiero vender.
+5. **Recurso gratuito** o siguiente paso, con palabra clave para pedirlo.
+
+Después de las 5 piezas añade:
+- **Plan de grabación en una sola sesión**: orden, planos y escenarios reutilizables, vestuario y duración estimada.
+- **Calendario de publicación**: una pieza por semana aproximadamente, intercalada con el resto de mi contenido.
+Las 5 piezas deben compartir el mensaje central pero tener hooks, estructuras y cierres distintos.`}
+else if(tool=="hooks")T=`Crea un BANCO DE ${n} HOOKS (ganchos) para vídeos y contenido de esta marca.${foco}
 Organízalos por categorías (curiosidad, error o mito, resultado/prueba, historia personal, pregunta directa, opinión polémica, lista o número, "nadie te cuenta…", antes/después). Para cada hook entrega:
 1. **Hook hablado**: frase exacta para los primeros 3 segundos.
 2. **Texto en pantalla**: versión de máximo 8 palabras.
@@ -272,6 +337,8 @@ const p=`Actúa como un estratega de contenido y social media manager con más d
 
 # PERFIL DE LA MARCA
 ${L}
+
+${VIR()}
 
 # TAREA
 ${T}
@@ -413,33 +480,33 @@ T=`Convierte esta idea en un MICRO REEL de ${$("m_dur").value}: ultra directo, u
 else{if(!v("r_hook")||!v("r_script")){alert("Pega al menos el hook y el guion.");return}
 const n=$("r_n").value;
 T=`RECICLA este contenido que ya funcionó. Analiza qué lo hizo funcionar y crea ${n} versiones nuevas distintas, para publicarlas sin que parezca repetido.\n\n# CONTENIDO ORIGINAL\n- Hook: ${v("r_hook")}\n- Guion:\n${v("r_script")}${v("r_cap")?`\n- Caption:\n${v("r_cap")}`:""}${v("r_stats")?`\n- Resultados: ${v("r_stats")}`:""}\n\n# ENTREGA\n1. **Diagnóstico**: por qué funcionó (hook, estructura, caption, emoción, tema) y qué elementos hay que conservar.\n2. **${n} versiones recicladas**, cada una con un ángulo o formato distinto (nuevo hook sobre el mismo tema, carrusel, historia, micro reel, post de imagen, versión polémica o versión con caso real). Para cada una: formato, nuevo hook (2 opciones), estructura o guion completo por tramos o slides, texto en pantalla, caption nuevo con CTA y recurso gratuito.\n3. **Qué mantener y qué cambiar** en cada versión.\n4. **Calendario de republicación**: orden y separación de días recomendada para no saturar.`}
-const p=`Actúa como un estratega de contenido y social media manager con más de 10 años de experiencia, experto en copywriting y contenido viral. Mantén siempre el tono, valores y objetivos de la marca.${ctx}\n\n# TAREA\n${T}\n\n# REGLAS\n- Responde en el idioma de la marca, con su tono.\n- Nada genérico: usa datos reales del perfil si lo he incluido.\n- Sé práctico: que pueda grabarlo o publicarlo hoy mismo.`;
+const p=`Actúa como un estratega de contenido y social media manager con más de 10 años de experiencia, experto en copywriting y contenido viral. Mantén siempre el tono, valores y objetivos de la marca.${ctx}\n\n${VIR()}\n\n# TAREA\n${T}\n\n# REGLAS\n- Responde en el idioma de la marca, con su tono.\n- Nada genérico: usa datos reales del perfil si lo he incluido.\n- Sé práctico: que pueda grabarlo o publicarlo hoy mismo.`;
 $("pre").textContent=p;$("out").classList.remove("hide");$("out").scrollIntoView({behavior:"smooth"})};
 tl3();
 
-const PF=()=>{try{return JSON.parse(localStorage.getItem("cs_profiles")||"[]")}catch(e){return[]}};
-const sp=a=>{try{localStorage.setItem("cs_profiles",JSON.stringify(a))}catch(e){}};
-const hs=async t=>{try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("cs:"+t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return btoa(unescape(encodeURIComponent(t)))}};
-function start(name,last){try{localStorage.setItem("cs_last",last)}catch(e){}$("wn").textContent="👤 "+name;$("lg").classList.add("hide");$("app").classList.remove("hide");build();show(1)}
-function enter(p){sm="local";KEY=p.k;try{D=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){D={}}start(p.n,p.id)}
-function rp(){const a=PF();$("plist").innerHTML=a.map((p,i)=>`<div style="display:flex;gap:6px;margin:6px 0"><button class="btn g" style="margin:0" data-e="${i}">👤 ${esc(p.n)}${p.h?" 🔒":""}</button><button class="btn g" style="margin:0;width:52px" data-x="${i}">✕</button></div>`).join("")||'<p class="note">Aún no hay perfiles. Crea el primero abajo.</p>';
-document.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>{const p=a[b.dataset.e];if(!p.h){enter(p);return}pend=p;$("pl").textContent="PIN de "+p.n;$("pi").value="";$("pie").textContent="";$("pcard").classList.remove("hide");$("pi").focus()});
-document.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{if(b.dataset.s){const p=a[b.dataset.x];try{localStorage.removeItem(p.k)}catch(e){}a.splice(b.dataset.x,1);sp(a);$("pcard").classList.add("hide");rp()}else{b.dataset.s=1;b.textContent="¿Borrar?"}})}
-$("pb").onclick=async()=>{if(await hs($("pi").value)==pend.h){$("pcard").classList.add("hide");enter(pend)}else $("pie").textContent="PIN incorrecto."};
-$("pc").onclick=async()=>{const n=$("pn").value.trim(),pw=$("pp").value.trim(),a=PF();
-if(!n){$("pe").textContent="Escribe un nombre.";return}if(a.some(p=>p.n.toLowerCase()==n.toLowerCase())){$("pe").textContent="Ya existe un perfil con ese nombre.";return}
-if(pw&&pw.length<4){$("pe").textContent="El PIN debe tener al menos 4 caracteres.";return}
-const id=Date.now().toString(36),p={id,n,k:"cs_brand_"+id,h:pw?await hs(pw):null};
-try{if(!a.length){const old=localStorage.getItem("cs_brand");if(old)localStorage.setItem(p.k,old)}}catch(e){}
-a.push(p);sp(a);$("pn").value="";$("pp").value="";enter(p)};
-async function enterCloud(){try{const id=await CL.u.id();if(!id){$("lge").textContent="No se pudo identificar tu cuenta.";return}
-cdoc=CL.db.collection("data/users/"+id).doc("brand");const sn=await cdoc.get();D={};if(sn.exists){try{D=JSON.parse(sn.data().d)||{}}catch(e){}}
-sm="cloud";let nm="Mi cuenta";try{nm=(await CL.u.me()).name||nm}catch(e){}start(nm,"cloud")}catch(e){$("lge").textContent="No se pudo conectar con tu cuenta."}}
-$("lgcb").onclick=enterCloud;
-$("lo").onclick=async e=>{e.preventDefault();if(sm=="cloud"&&tmr){clearTimeout(tmr);await cw()}try{localStorage.removeItem("cs_last")}catch(x){}D={};sm="local";$("app").classList.add("hide");$("lg").classList.remove("hide");$("pcard").classList.add("hide");rp()};
-rp();
-(async()=>{let last="";try{last=localStorage.getItem("cs_last")||""}catch(e){}
-const p=PF().find(x=>x.id==last);if(p&&!p.h)enter(p);
-try{if(!window.claude)return;const[u,db]=await Promise.all([claude.use("user"),claude.use("db")]);if(u&&db){CL={u,db};$("lgc").classList.remove("hide");if(last=="cloud")enterCloud()}}catch(e){}})();
+try{let o=localStorage.getItem("cs_brand");if(!o){const u=JSON.parse(localStorage.getItem("cs_users")||"[]"),l=localStorage.getItem("cs_last"),a=u.find(x=>x.id==l)||u[0];
+if(a)o=localStorage.getItem(a.k);else{const pf=JSON.parse(localStorage.getItem("cs_profiles")||"[]");if(pf[0])o=localStorage.getItem(pf[0].k)}if(o)localStorage.setItem("cs_brand",o)}
+D=JSON.parse(localStorage.getItem("cs_brand")||"{}")}catch(e){}
+
+const VIR=()=>{if(!$("vir").checked)return "";const f=new Date().toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"});
+return `# PASO PREVIO OBLIGATORIO: PATRONES VIRALES ACTUALES DE INSTAGRAM
+Hoy es ${f}. Antes de crear nada, analiza qué patrones virales están funcionando AHORA en Instagram (sobre todo en Reels) para mi nicho y para este formato:
+1. Si tienes búsqueda web, úsala para identificar los formatos, estructuras de gancho, tendencias de audio, duraciones, estilos de edición y temas que están rindiendo este mes, e indica las fuentes. Si no puedes buscar, dilo al empezar, apóyate en los patrones más consolidados que conozcas, avisa de que pueden haber cambiado y NO inventes tendencias ni cifras.
+2. Empieza tu respuesta con un resumen breve de 5-7 patrones actuales: nombre del patrón, por qué funciona y cómo adaptarlo a mi nicho.
+3. Después crea lo que te pido aplicando de forma explícita los patrones más adecuados para mi marca, indicando en cada pieza cuál has usado.
+4. Descarta los patrones que no encajen con mi tono, mi audiencia o mis valores, aunque sean virales.`};
+
+const AN={"Mito falso":"Mito falso: desmonta una creencia falsa muy extendida sobre el tema","Errores":"Errores: los fallos más comunes y cómo evitarlos","Lo que nadie te cuenta":"Lo que nadie te cuenta: una verdad incómoda del sector que casi nadie dice","Ranking":"Ranking: ordena opciones o métodos de peor a mejor con criterio","Lo que viene":"Lo que viene: un cambio o tendencia próxima y cómo prepararse","Cómo hacerlo":"Cómo hacerlo: tutorial paso a paso","Checklist":"Checklist: lista de comprobación para guardar","Tu método en pasos":"Tu método en pasos: tu método propio en pasos numerados","Herramientas":"Herramientas: recursos o productos recomendados y para qué sirve cada uno","Esto sí, esto no":"Esto sí, esto no: qué hacer y qué evitar","Lo que me pasó":"Lo que me pasó: anécdota personal real con aprendizaje","Detrás de cámaras":"Detrás de cámaras: cómo trabajas por dentro","Si empezara hoy":"Si empezara hoy: qué haría distinto empezando de cero","Lo probé 7 días":"Lo probé 7 días: prueba o reto de una semana con resultados","Reacción":"Reacción: reacciona con tu opinión experta a un contenido o mito del sector","Antes y después":"Antes y después: transformación mostrando el proceso","Caso real":"Caso real: historia de un cliente con resultado","Te lo analizo":"Te lo analizo: analizas el caso de alguien y das un diagnóstico","Objeción":"Objeción: respondes a lo que frena la compra","Pregunta de cliente":"Pregunta de cliente: respondes una duda frecuente de tus clientes"};
+const PG=[["Que te descubran",["Mito falso","Errores","Lo que nadie te cuenta","Ranking","Lo que viene"]],["Que te guarden",["Cómo hacerlo","Checklist","Tu método en pasos","Herramientas","Esto sí, esto no"]],["Que confíen en ti",["Lo que me pasó","Detrás de cámaras","Si empezara hoy","Lo probé 7 días","Reacción"]],["Que te compren",["Antes y después","Caso real","Te lo analizo","Objeción","Pregunta de cliente"]]];
+const PS=new Set();
+function pzr(){$("pzc").innerHTML=PG.map(([g,a])=>`<p class="note" style="grid-column:span 2;font-weight:700;margin:8px 0 0">${g}</p>`+a.map(k=>`<button class="tt ${PS.has(k)?"on":""}" style="padding:10px 6px;font-size:13px" data-a="${k}">${k}</button>`).join("")).join("");
+$("pzn").textContent="("+PS.size+"/5)";
+document.querySelectorAll("#pzc [data-a]").forEach(b=>b.onclick=()=>{const k=b.dataset.a;if(PS.has(k))PS.delete(k);else if(PS.size<5)PS.add(k);pzr()})}
+pzr();
+
+function dlr(){const v=(D.problemas||"").trim();let a=v.split(/\n|;|•/).map(x=>x.replace(/^[-–\s]+/,"").trim()).filter(Boolean);if(a.length==1)a=v.split(",").map(x=>x.trim()).filter(Boolean);
+a=a.slice(0,8);$("dlc").innerHTML=a.length?'<p class="note" style="grid-column:span 2;font-weight:700;margin:0">Dolores de tu marca (toca para usar)</p>'+a.map((x,i)=>`<button class="tt" style="padding:10px 8px;font-size:13px;grid-column:span 2" data-d="${i}">${esc(x)}</button>`).join(""):"";
+document.querySelectorAll("#dlc [data-d]").forEach(b=>b.onclick=()=>{$("dli").value=a[b.dataset.d]})}
+dlr();$("n2").addEventListener("click",dlr);$("m2").addEventListener("click",dlr);
 build();tabs();
 </script></body></html>
