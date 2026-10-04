@@ -30,6 +30,15 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 </style></head><body><main>
 <h1>✨ Content Studio</h1>
 <p class="s">Tu marca guardada + prompts listos para pegar en cualquier IA.</p>
+<div id="pick">
+<h2 style="text-align:center;margin:18px 0 4px;font-size:20px">¿Quién va a usar la app?</h2>
+<p class="s" style="text-align:center">Elige tu usuario o crea uno nuevo.</p>
+<div id="pcards" class="grid"></div>
+<button class="btn g" id="pedit">✎ Editar usuarios</button>
+<div class="card" id="padd"><h2>＋ Nuevo usuario</h2><input id="pfi" maxlength="30" placeholder="Tu nombre o el de tu marca"><button class="btn" id="pfc">Crear y entrar</button><p class="note" id="pfe" style="margin:8px 0 0">Cada usuario tiene su propia marca guardada en este dispositivo. No hay contraseñas.</p></div>
+</div>
+<div id="app" class="hide">
+<div class="note" style="display:flex;justify-content:space-between;align-items:center"><span id="wn"></span><a href="#" id="lo" style="color:var(--ac);font-weight:600">Cambiar de usuario</a></div>
 <nav><button id="n1" class="on">Mi marca</button><button id="n2">Crear contenido</button><button id="n3">Novedades IG</button></nav>
 
 <section id="v1">
@@ -107,6 +116,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 <div class="card hide" id="nout"><h2>Tu prompt</h2><pre id="npre"></pre><button class="btn" id="ncopy">Copiar prompt</button></div>
 <div id="nlist"></div>
 </section>
+</div>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -508,5 +518,27 @@ function dlr(){const v=(D.problemas||"").trim();let a=v.split(/\n|;|•/).map(x=
 a=a.slice(0,8);$("dlc").innerHTML=a.length?'<p class="note" style="grid-column:span 2;font-weight:700;margin:0">Dolores de tu marca (toca para usar)</p>'+a.map((x,i)=>`<button class="tt" style="padding:10px 8px;font-size:13px;grid-column:span 2" data-d="${i}">${esc(x)}</button>`).join(""):"";
 document.querySelectorAll("#dlc [data-d]").forEach(b=>b.onclick=()=>{$("dli").value=a[b.dataset.d]})}
 dlr();$("n2").addEventListener("click",dlr);$("m2").addEventListener("click",dlr);
+
+const PFK="cs_pf2";let PF=[],ed=false;try{PF=JSON.parse(localStorage.getItem(PFK)||"[]")}catch(e){}
+if(!PF.length)PF=[{id:"main",n:"Principal",k:"cs_brand"}];
+const spf=()=>{try{localStorage.setItem(PFK,JSON.stringify(PF))}catch(e){}};spf();
+const pm=(t,bad)=>{$("pfe").textContent=t;$("pfe").style.color=bad?"#d33":""};
+function enter(id){const p=PF.find(x=>x.id==id)||PF[0];KEY=p.k;try{D=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){D={}}
+$("out").classList.add("hide");$("nout").classList.add("hide");$("wn").textContent="👤 "+p.n;$("pick").classList.add("hide");$("app").classList.remove("hide");build();dlr();show(1)}
+function rp(){$("pcards").innerHTML=ed?PF.map((p,i)=>`<div class="card" style="grid-column:span 2;margin:4px 0"><input data-n="${i}" value="${esc(p.n)}" maxlength="30"><div class="grid" style="margin-top:8px"><button class="btn" style="margin:0" data-s="${i}">Guardar nombre</button><button class="btn g" style="margin:0" data-x="${i}">🗑 Eliminar</button></div></div>`).join(""):
+PF.map((p,i)=>`<button class="mt" style="padding:18px 8px" data-e="${i}"><div style="width:54px;height:54px;border-radius:50%;background:var(--ac);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">${esc((p.n.trim()[0]||"?").toUpperCase())}</div>${esc(p.n)}</button>`).join("");
+$("pedit").textContent=ed?"✓ Hecho":"✎ Editar usuarios";$("padd").classList.toggle("hide",ed);
+document.querySelectorAll("#pcards [data-e]").forEach(b=>b.onclick=()=>enter(PF[b.dataset.e].id));
+document.querySelectorAll("#pcards [data-s]").forEach(b=>b.onclick=()=>{const i=+b.dataset.s,n=document.querySelector(`#pcards [data-n="${i}"]`).value.trim();
+if(!n)return pm("El nombre no puede estar vacío.",1);if(PF.some((x,j)=>j!=i&&x.n.toLowerCase()==n.toLowerCase()))return pm("Ya existe un usuario con ese nombre.",1);PF[i].n=n;spf();pm("✓ Nombre guardado.");b.textContent="✓ Guardado"});
+document.querySelectorAll("#pcards [data-x]").forEach(b=>b.onclick=()=>{const i=+b.dataset.x;if(PF.length<2)return pm("Debe quedar al menos un usuario.",1);
+if(!b.dataset.c){b.dataset.c=1;b.textContent="¿Seguro? Pulsa de nuevo";return}
+try{localStorage.removeItem(PF[i].k)}catch(e){}PF.splice(i,1);spf();rp();pm("Usuario eliminado.")})}
+$("pedit").onclick=()=>{ed=!ed;pm("");rp()};
+$("pfc").onclick=()=>{const n=$("pfi").value.trim();if(!n)return pm("Escribe un nombre.",1);if(PF.some(x=>x.n.toLowerCase()==n.toLowerCase()))return pm("Ya existe un usuario con ese nombre.",1);
+const id=Date.now().toString(36);PF.push({id,n,k:"cs_brand_"+id});spf();$("pfi").value="";pm("");enter(id)};
+$("pfi").addEventListener("keydown",e=>{if(e.key=="Enter")$("pfc").click()});
+$("lo").onclick=e=>{e.preventDefault();D={};ed=false;$("app").classList.add("hide");$("pick").classList.remove("hide");rp();scrollTo(0,0)};
+rp();
 build();tabs();
 </script></body></html>
