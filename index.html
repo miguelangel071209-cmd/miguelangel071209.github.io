@@ -50,7 +50,9 @@ pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px s
 <div id="form"></div>
 <button class="btn g" id="reset">Borrar mi marca</button>
 <p class="note">Se guarda automáticamente en este dispositivo y navegador.</p>
-<div class="card"><h2>Exportar tu marca</h2><button class="btn" id="dl">⬇ Descargar mi marca en PDF</button><p class="note" id="st2" style="margin:8px 0 0"></p></div>
+<div class="card"><h2>Exportar tu marca</h2><button class="btn" id="dl">⬇ Descargar mi marca en PDF</button>
+<button class="btn g" id="shb">📤 Compartir o copiar mi marca como texto</button>
+<textarea id="shx" class="hide" readonly style="min-height:150px;margin-top:8px"></textarea><p class="note" id="st2" style="margin:8px 0 0"></p></div>
 </section>
 
 <section id="v2" class="hide">
@@ -229,10 +231,10 @@ S.forEach(([t,fs])=>{const fl=fs.filter(f=>(D[f[0]]||"").trim());if(!fl.length)r
 fl.forEach(f=>{ln(f[1]+":","bold",10,[30,30,30],14);ln(D[f[0]].trim(),"normal",10,[60,60,60],14);y+=4})});
 d.setProperties({title:"Marca personal",keywords:btoa(unescape(encodeURIComponent(JSON.stringify(D))))});
 const dls=window.claude&&await claude.use("downloads");
-if(!dls){st("La descarga no está disponible en esta vista.");return}
+if(!dls){const u=URL.createObjectURL(d.output("blob")),l=document.createElement("a");l.href=u;l.download="mi-marca-personal.pdf";document.body.appendChild(l);l.click();l.remove();st("Si el PDF no se ha descargado, usa «Compartir o copiar mi marca como texto» aquí debajo: funciona en cualquier navegador.");return}
 await dls.save({filename:"mi-marca-personal.pdf",data:d.output("blob")});st("PDF listo ✓")}
 catch(e){st(e&&e.code=="declined"?"Descarga cancelada.":"No se pudo generar el PDF.")}};
-function parse(t){const L=t.toLowerCase(),pos=all.map(f=>[f,L.indexOf(f[1].toLowerCase())]).filter(x=>x[1]>=0).sort((a,b)=>a[1]-b[1]),r={},re=new RegExp("\\s*("+S.map(x=>x[0]).join("|")+")\\s*$");
+function parse(t){const L=t.toLowerCase(),pos=all.map(f=>[f,L.indexOf(f[1].toLowerCase())]).filter(x=>x[1]>=0).sort((a,b)=>a[1]-b[1]),r={},re=new RegExp("[\\s■]*("+S.map(x=>x[0]).join("|")+")\\s*$","i");
 pos.forEach(([f,i],j)=>{const e=j+1<pos.length?pos[j+1][1]:t.length;const v=t.slice(i+f[1].length,e).replace(/^[\s:]+/,"").replace(/\s+/g," ").trim().replace(re,"");if(v)r[f[0]]=v});return r}
 $("up").onchange=async e=>{sid="st";const f=e.target.files[0];e.target.value="";if(!f)return;st("Leyendo PDF…");
 try{const buf=await f.arrayBuffer();let r=null;
@@ -540,5 +542,15 @@ const id=Date.now().toString(36);PF.push({id,n,k:"cs_brand_"+id});spf();$("pfi")
 $("pfi").addEventListener("keydown",e=>{if(e.key=="Enter")$("pfc").click()});
 $("lo").onclick=e=>{e.preventDefault();D={};ed=false;$("app").classList.add("hide");$("pick").classList.remove("hide");rp();scrollTo(0,0)};
 rp();
+
+function brandText(){if(!all.some(f=>(D[f[0]]||"").trim()))return "";
+let t="MARCA PERSONAL"+(D.nombre?": "+D.nombre.trim():"")+"\n";
+S.forEach(([n,fs])=>{const fl=fs.filter(f=>(D[f[0]]||"").trim());if(!fl.length)return;t+="\n■ "+n+"\n";fl.forEach(f=>{t+="\n"+f[1]+":\n"+D[f[0]].trim()+"\n"})});return t}
+function ap(r){const k=all.map(f=>f[0]).filter(x=>r&&typeof r[x]=="string"&&r[x].trim());if(!k.length)return 0;k.forEach(x=>D[x]=r[x]);save();build();return k.length}
+$("shb").onclick=async()=>{sid="st2";const t=brandText();if(!t){st("Primero rellena algún dato de tu marca.");return}
+$("shx").value=t;$("shx").classList.remove("hide");
+try{if(navigator.share){await navigator.share({title:"Mi marca personal",text:t});st("✓ Compartido. Guárdalo en Notas, WhatsApp, email o Docs.");return}}catch(e){if(e&&e.name=="AbortError"){st("Compartir cancelado.");return}}
+try{await navigator.clipboard.writeText(t);st("✓ Copiado. Pégalo en Notas, WhatsApp, email o Docs para guardarlo.")}catch(e){$("shx").focus();$("shx").select();st("Copia el texto de aquí abajo y guárdalo donde quieras.")}};
+$("shx").onfocus=()=>$("shx").select();
 build();tabs();
 </script></body></html>
