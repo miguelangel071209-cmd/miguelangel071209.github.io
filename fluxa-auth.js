@@ -72,25 +72,178 @@
     var logo = (document.querySelector('.hd img') || {}).src || '';
     g.innerHTML = '<div class="fx-box">' + (logo ? '<img alt="Fluxa" src="' + logo + '">' : '') + html + '</div>';
   }
-  function showLoading(t) { gate('<p class="note">' + esc(t) + '</p>'); }
-  function showLogin(msg, bad) {
-    gate('<h2>Accede a FLUXA</h2><p class="note">Acceso solo para correos autorizados. Te enviaremos un enlace de acceso, sin contraseña.</p>' +
-      '<input id="fx-em" type="email" autocomplete="email" inputmode="email" placeholder="tu@correo.com"><button class="btn" id="fx-send">Enviar enlace de acceso</button>' +
-      '<p class="note" id="fx-msg" style="' + (bad ? 'color:#d33' : '') + '">' + esc(msg || '') + '</p>');
-    $('fx-send').onclick = sendLink;
-    $('fx-em').onkeydown = function (e) { if (e.key === 'Enter') sendLink(); };
-  }
-  async function sendLink() {
-    var em = ($('fx-em').value || '').trim().toLowerCase(), m = $('fx-msg');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { m.style.color = '#d33'; m.textContent = 'Escribe un correo válido.'; return; }
-    $('fx-send').disabled = true; m.style.color = ''; m.textContent = 'Enviando…';
-    var r = await sb.auth.signInWithOtp({ email: em, options: { shouldCreateUser: true, emailRedirectTo: location.origin + location.pathname } });
-    $('fx-send').disabled = false;
-    if (r.error && /rate|limit|seconds/i.test(r.error.message)) { m.style.color = '#d33'; m.textContent = 'Demasiados intentos. Espera un momento e inténtalo de nuevo.'; return; }
-    /* Respuesta genérica: no revela si el correo está autorizado */
-    m.textContent = 'Si el correo está autorizado, recibirás un enlace de acceso en unos instantes. Ábrelo en este dispositivo.';
+  function showLoading(t) {
+    gate('<p class="note">' + esc(t) + '</p>');
   }
 
+  function showLogin(msg, bad) {
+    gate(
+      '<h2>Accede a FLUXA</h2>' +
+      '<p class="note">Introduce tu correo y contraseña.</p>' +
+      '<input id="fx-em" type="email" autocomplete="email" placeholder="tu@correo.com">' +
+      '<input id="fx-pw" type="password" autocomplete="current-password" placeholder="Contraseña">' +
+      '<button class="btn" id="fx-login">Entrar</button>' +
+      '<p><a href="#" id="fx-register">Crear cuenta</a></p>' +
+      '<p><a href="#" id="fx-reset">He olvidado mi contraseña</a></p>' +
+      '<p class="note" id="fx-msg" style="' + (bad ? 'color:#d33' : '') + '">' + esc(msg || '') + '</p>'
+    );
+
+    $('fx-login').onclick = loginPassword;
+    $('fx-register').onclick = function (e) {
+      e.preventDefault();
+      showRegister();
+    };
+    $('fx-reset').onclick = function (e) {
+      e.preventDefault();
+      resetPassword();
+    };
+  }
+
+  function showRegister(msg, bad) {
+    gate(
+      '<h2>Crear cuenta</h2>' +
+      '<p class="note">Solo podrán acceder los correos autorizados por el administrador.</p>' +
+      '<input id="fx-em" type="email" autocomplete="email" placeholder="tu@correo.com">' +
+      '<input id="fx-pw" type="password" autocomplete="new-password" placeholder="Crea una contraseña">' +
+      '<button class="btn" id="fx-register-btn">Registrarme</button>' +
+      '<p><a href="#" id="fx-back">Volver al acceso</a></p>' +
+      '<p class="note" id="fx-msg" style="' + (bad ? 'color:#d33' : '') + '">' + esc(msg || '') + '</p>'
+    );
+
+    $('fx-register-btn').onclick = registerPassword;
+    $('fx-back').onclick = function (e) {
+      e.preventDefault();
+      showLogin();
+    };
+  }
+
+  async function loginPassword() {
+    var em = ($('fx-em').value || '').trim().toLowerCase();
+    var pw = $('fx-pw').value || '';
+    var m = $('fx-msg');
+
+    if (!em || !pw) {
+      m.style.color = '#d33';
+      m.textContent = 'Introduce tu correo y contraseña.';
+      return;
+    }
+
+    $('fx-login').disabled = true;
+    m.textContent = 'Comprobando…';
+
+    var r = await sb.auth.signInWithPassword({ email: em, password: pw });
+
+    $('fx-login').disabled = false;
+
+    if (r.error) {
+      m.style.color = '#d33';
+      m.textContent = 'Correo o contraseña incorrectos.';
+      return;
+    }
+
+    proceed(r.data.session);
+  }
+
+  async function registerPassword() {
+    var em = ($('fx-em').value || '').trim().toLowerCase();
+    var pw = $('fx-pw').value || '';
+    var m = $('fx-msg');
+
+    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(em)) {
+      m.style.color = '#d33';
+      m.textContent = 'Escribe un correo válido.';
+      return;
+    }
+
+    if (pw.length < 8) {
+      m.style.color = '#d33';
+      m.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+      return;
+    }
+
+    $('fx-register-btn').disabled = true;
+    m.textContent = 'Creando cuenta…';
+
+    var r = await sb.auth.signUp({
+      email: em,
+      password: pw,
+      options: {
+        emailRedirectTo: location.origin + location.pathname
+      }
+    });
+
+    $('fx-register-btn').disabled = false;
+
+    if (r.error) {
+      m.style.color = '#d33';
+      m.textContent = 'No se pudo crear la cuenta. Comprueba los datos.';
+      return;
+    }
+
+    if (r.data.session) {
+      proceed(r.data.session);
+    } else {
+      showLogin('Si el correo está autorizado, confirma tu cuenta desde el email y después inicia sesión.', false);
+    }
+  }
+
+  async function resetPassword() {
+    var em = ($('fx-em').value || '').trim().toLowerCase();
+    var m = $('fx-msg');
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
+      m.style.color = '#d33';
+      m.textContent = 'Escribe primero tu correo.';
+      return;
+    }
+
+    m.textContent = 'Enviando instrucciones…';
+
+    var r = await sb.auth.resetPasswordForEmail(em, {
+      redirectTo: location.origin + location.pathname
+    });
+
+    m.style.color = r.error ? '#d33' : '';
+    m.textContent = r.error
+      ? 'No se pudo enviar el correo. Inténtalo más tarde.'
+      : 'Si el correo existe, recibirás instrucciones para cambiar la contraseña.';
+  }
+
+  function showRecovery() {
+    gate(
+      '<h2>Nueva contraseña</h2>' +
+      '<input id="fx-newpw" type="password" autocomplete="new-password" placeholder="Nueva contraseña">' +
+      '<button class="btn" id="fx-savepw">Guardar contraseña</button>' +
+      '<p class="note" id="fx-msg"></p>'
+    );
+
+    $('fx-savepw').onclick = async function () {
+      var pw = $('fx-newpw').value || '';
+      var m = $('fx-msg');
+
+      if (pw.length < 8) {
+        m.style.color = '#d33';
+        m.textContent = 'Usa al menos 8 caracteres.';
+        return;
+      }
+
+      $('fx-savepw').disabled = true;
+      m.textContent = 'Guardando…';
+
+      var r = await sb.auth.updateUser({ password: pw });
+
+      if (r.error) {
+        $('fx-savepw').disabled = false;
+        m.style.color = '#d33';
+        m.textContent = 'No se pudo cambiar la contraseña. Solicita otro enlace.';
+        return;
+      }
+
+      m.textContent = 'Contraseña actualizada. Entrando…';
+      var s = (await sb.auth.getSession()).data.session;
+      if (s) proceed(s);
+    };
+  }
   /* ---------- Flujo principal ---------- */
   async function check() {
     var r = await sb.rpc('my_access');
@@ -172,11 +325,21 @@
       gate('<h2>Falta configurar Supabase</h2><p class="note">Edita config.js con la URL y la clave pública (anon) de tu proyecto.</p>'); return;
     }
     sb = window.supabase.createClient(C.url, C.anonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'implicit' } });
+        var recovery = location.hash.indexOf('type=recovery') > -1;
     var hashErr = /error_description=([^&]+)/.exec(location.hash);
     var s = (await sb.auth.getSession()).data.session;
-    if (location.hash.indexOf('access_token') > -1 || hashErr) history.replaceState(null, '', location.pathname + location.search);
-    if (s) proceed(s);
-    else showLogin(hashErr ? 'El enlace no es válido o ha caducado. Solicita uno nuevo.' : '', !!hashErr);
+
+    if (recovery && s) {
+      showRecovery();
+    } else if (location.hash.indexOf('access_token') > -1 || hashErr) {
+      history.replaceState(null, '', location.pathname + location.search);
+      if (s) proceed(s);
+      else showLogin(hashErr ? 'El enlace no es válido o ha caducado.' : '', !!hashErr);
+    } else if (s) {
+      proceed(s);
+    } else {
+      showLogin();
+    }
     sb.auth.onAuthStateChange(function (ev) { if (ev === 'SIGNED_OUT' && booted) location.reload(); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
