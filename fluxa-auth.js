@@ -149,7 +149,7 @@
     var pw = $('fx-pw').value || '';
     var m = $('fx-msg');
 
-    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(em)) {
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
       m.style.color = '#d33';
       m.textContent = 'Escribe un correo válido.';
       return;
