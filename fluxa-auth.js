@@ -203,10 +203,10 @@
       redirectTo: location.origin + location.pathname
     });
 
-    m.style.color = r.error ? '#d33' : '';
-    m.textContent = r.error
-      ? 'No se pudo enviar el correo. Inténtalo más tarde.'
-      : 'Si el correo existe, recibirás instrucciones para cambiar la contraseña.';
+m.style.color = r.error ? '#d33' : '';
+m.textContent = r.error
+  ? 'Error: ' + r.error.message
+  : 'Correo enviado. Revisa tu bandeja de entrada.';
   }
 
   function showRecovery() {
