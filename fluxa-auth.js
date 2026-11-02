@@ -177,10 +177,10 @@ if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
     $('fx-register-btn').disabled = false;
 
     if (r.error) {
-      m.style.color = '#d33';
-      m.textContent = 'No se pudo crear la cuenta. Comprueba los datos.';
-      return;
-    }
+  m.style.color = '#d33';
+  m.textContent = 'Error: ' + r.error.message;
+  return;
+}
 
     if (r.data.session) {
       proceed(r.data.session);
