@@ -146,6 +146,8 @@
 
   async function registerPassword() {
     var em = ($('fx-em').value || '').trim().toLowerCase();
+    console.log('FLUXA email:', JSON.stringify(em));
+console.log('FLUXA valid:', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em));
     var pw = $('fx-pw').value || '';
     var m = $('fx-msg');
 
