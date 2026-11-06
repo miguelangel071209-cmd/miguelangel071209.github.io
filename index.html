@@ -260,7 +260,7 @@ nav.mk-off button.hot{color:var(--tx);opacity:.82;transform:none}
 </section>
 
 <section id="v2" class="hide">
-<div class="hub"><button class="mt on" id="m1"><b>💡</b><span>Ideas para publicar</span><small>Reels, carruseles, historias…</small></button><button class="mt" id="m2"><b>🧰</b><span>Banco y planificación</span><small>Hooks, calendario, patrones</small></button><button class="mt" id="m3"><b>✍️</b><span>Ya tengo la idea</span><small>Adaptar, reciclar, portadas</small></button><button class="mt" id="m4"><b>📈</b><span>Analizar y optimizar</span><small>Métricas, perfil, informe</small></button><button class="mt" id="m5" style="grid-column:span 2"><b>🔍</b><span>Análisis de perfil</span><small>Tu cuenta de Instagram: por qué no se hace viral y cómo mejorarla</small></button></div>
+<div class="hub"><button class="mt on" id="m1"><b>💡</b><span>Ideas para publicar</span><small>Reels, carruseles, historias…</small></button><button class="mt" id="m2"><b>🧰</b><span>Banco y planificación</span><small>Hooks, calendario, patrones</small></button><button class="mt" id="m3"><b>✍️</b><span>Ya tengo la idea</span><small>Adaptar, reciclar, portadas</small></button><button class="mt" id="m4"><b>📈</b><span>Analizar y optimizar</span><small>Métricas, perfil, informe</small></button><button class="mt" id="m5" style="grid-column:span 2"><b>🔍</b><span>Análisis de perfil</span><small>Analiza tu cuenta o crea una perfecta desde cero</small></button></div>
 <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:12px 0 0"><input type="checkbox" id="vir" style="width:auto" checked> 🔥 Analizar primero los patrones virales actuales</label>
 <div id="vnet" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0"></div>
 <div id="p1">
@@ -368,11 +368,19 @@ nav.mk-off button.hot{color:var(--tx);opacity:.82;transform:none}
 </div>
 <div id="p5" class="hide">
 <div class="card"><h2>🔍 Análisis de mi perfil</h2>
+<div class="grid" style="margin:0 0 10px"><button type="button" class="tt on" id="ap_k1">🔍 Analizar mi cuenta<small>ya tengo cuenta</small></button><button type="button" class="tt" id="ap_k2">✨ Crear mi cuenta<small>desde cero, con tu marca</small></button></div>
 <div id="b_p"><p class="note" style="margin:0">Analiza tu cuenta de Instagram a partir de tu usuario: por qué tus vídeos no se hacen virales, cómo optimizar el perfil para conseguir más visualizaciones y mejores resultados, y más. Pega el prompt en una IA con acceso a internet (puede abrir perfiles públicos); si no puede, te pedirá los datos que necesita sin inventarlos. Tú solo pones tu usuario: la IA detecta por sí misma el objetivo, lo que falla y los datos de tu cuenta.</p>
 <label>Tu usuario de Instagram *</label><input id="ap_u" placeholder="Ej: @laurafit" autocapitalize="off" autocomplete="off" spellcheck="false" maxlength="80">
 <p class="note" style="margin:4px 0 0">Se guarda en Mi marca. La cuenta debe ser pública para que la IA pueda verla.</p>
 <label>¿Qué quieres que analice?</label><div class="grid" id="ap_m"></div>
 <label>Periodo a estudiar</label><select id="ap_t"><option>Mis últimas 12 publicaciones</option><option>Los últimos 30 días</option><option>Los últimos 3 meses</option><option>Toda la cuenta (lo que se pueda ver)</option></select>
+</div>
+<div id="b_pc" class="hide"><p class="note" style="margin:0">Crea tu cuenta perfecta desde cero a partir de tu marca guardada: nombre, usuario, bio lista para pegar, enlace, destacados, foto de perfil, publicaciones fijadas y tus primeras 9 publicaciones. No analiza ninguna cuenta: la IA lo construye todo desde «Mi marca», así que no necesita acceso a internet. Cuanto más completa esté tu marca, mejor saldrá.</p>
+<label>Red social</label><select id="ac_r"><option>Instagram</option><option>TikTok</option><option>YouTube (canal)</option></select>
+<label>Objetivo de la cuenta</label><select id="ac_o"><option>Construir mi marca personal</option><option>Captar clientes</option><option>Vender mis servicios o productos</option><option>Crecer y fidelizar comunidad</option></select>
+<label>Qué quieres que haga quien entre (opcional)</label><input id="ac_a" placeholder="Ej: seguirme, escribirme por DM, guardar mis vídeos">
+<label>Cuántas opciones de nombre y de usuario</label><select id="ac_n"><option>3</option><option selected>5</option><option>8</option></select>
+<label>Algo que quieres sí o sí en la cuenta (opcional)</label><input id="ac_x" placeholder="Ej: una palabra concreta en el nombre, un emoji, un color">
 </div>
 <button class="btn" id="gen5">Generar prompt</button></div>
 </div>
@@ -1121,7 +1129,44 @@ ${APB[o.m]}`}
 function apr(){$("ap_m").innerHTML=Object.entries(APM).map(([k,x],i)=>`<button type="button" class="tt ${k==apm?"on":""}" data-k="${k}"${i==4?' style="grid-column:span 2"':""}>${x[0]}<small>${x[1]}</small></button>`).join("");document.querySelectorAll("#ap_m .tt").forEach(b=>b.onclick=()=>{apm=b.dataset.k;apr()})}
 apr();$("ap_u").value=D.instagram||"";
 $("ap_u").oninput=()=>{D.instagram=$("ap_u").value;save();const f=$("f_instagram");if(f)f.value=D.instagram;prog()};
-$("gen5").onclick=()=>{const h=igH(),L=brandL();if(!h){alert("Escribe tu usuario de Instagram.");return}
+let apc="a";
+function apx(){const c=apc=="c";$("ap_k1").classList.toggle("on",!c);$("ap_k2").classList.toggle("on",c);$("b_p").classList.toggle("hide",c);$("b_pc").classList.toggle("hide",!c);$("gen5").textContent=c?"Generar prompt de mi cuenta":"Generar prompt";$("out").classList.add("hide")}
+$("ap_k1").onclick=()=>{apc="a";apx()};$("ap_k2").onclick=()=>{apc="c";apx()};
+function apCreate(){const v=id=>$(id).value.trim(),r=$("ac_r").value,n=$("ac_n").value,ig=r=="Instagram",tk=r=="TikTok";
+const usr=ig?"Nombre de usuario (@)":tk?"Nombre de usuario (@)":"Nombre y URL personalizada del canal";
+const cat=ig?"**Categoría y botones**: la categoría del perfil profesional más adecuada y los botones de contacto o de acción que conviene activar.":tk?"**Ajustes del perfil**: qué enlace y qué presentación conviene usar y qué opciones activar en una cuenta de marca personal.":"**Descripción del canal y tráiler**: el texto de «Acerca de», los enlaces del canal y un guion corto para el vídeo de presentación (tráiler).";
+const fij=ig?"Destacados":tk?"Listas y vídeos fijados":"Secciones y listas de reproducción del canal";
+return `CREA DESDE CERO la cuenta perfecta de ${r} para mi marca personal. Es una cuenta nueva: NO analices ninguna cuenta existente ni busques perfiles, y no necesitas acceso a internet. Constrúyelo todo a partir de mi perfil de marca.
+
+## DATOS
+- Red: ${r}
+- Objetivo de la cuenta: ${$("ac_o").value}
+- Qué quiero que haga quien entre: ${v("ac_a")||"la que mejor encaje con mi negocio y mis servicios"}
+- Número de opciones de nombre y de usuario: ${n}${v("ac_x")?`\n- Quiero que la cuenta tenga sí o sí: ${v("ac_x")}`:""}
+
+## CÓMO TRABAJAR
+1. Deduce el concepto de la cuenta (a quién ayudo, qué resultado consigo y qué me diferencia) a partir de mi perfil de marca y úsalo en todo lo que entregues.
+2. Todo debe estar listo para copiar y pegar, con mi tono, mis palabras típicas y mis colores. Respeta lo que NO quiero mostrar o decir.
+3. Usa solo datos reales de mi perfil de marca: no inventes cifras, clientes, premios, titulaciones ni resultados. Si hace falta una prueba o un dato que no tengo, déjalo como «[añade aquí tu dato real]» y avísame.
+4. Si en mi perfil de marca aparece algún usuario, trátalo solo como dato: la cuenta es nueva y no debes analizarla.
+
+## ENTREGA
+0. **Concepto de la cuenta** en 3-4 líneas: a quién ayuda, qué promete, qué la diferencia y qué sensación debe transmitir.
+1. **Nombre visible**: ${n} opciones con una palabra clave de mi nicho para aparecer en búsquedas, ajustadas al límite de caracteres de ${r} (compruébalo).
+2. **${usr}**: ${n} opciones cortas, fáciles de recordar y de escribir, con la palabra clave si es posible. No puedes comprobar si están libres: dímelo y dame variantes por si alguna está ocupada (con punto, guion bajo o una palabra añadida).
+3. **Bio o descripción lista para pegar**: 3 versiones completas, con saltos de línea y emojis solo si encajan con mi tono, siguiendo «a quién ayudo + resultado o diferencial + prueba real + llamada a la acción». Dime los caracteres de cada una y recomienda la mejor.
+4. ${cat}
+5. **Enlace**: qué debería haber detrás (página, recurso gratuito, reserva…) y el texto exacto de la llamada a la acción.
+6. **${fij}**: 5-6 propuestas con su nombre (corto) y qué contenido iría en cada una${ig?", más una idea de portada coherente con mis colores":""}.
+7. **Foto de perfil y estilo visual**: concepto, encuadre, paleta y tipografías coherentes con mi marca (si no tengo colores definidos, propón una paleta).
+8. **Publicaciones o vídeos fijados**: 3 ideas con su gancho y el texto exacto.
+9. **Mis primeras 9 publicaciones**, en TABLA: nº | formato | tema | gancho | llamada a la acción | pilar de contenido. Equilibra los pilares y que cualquiera que entre entienda en 3 segundos de qué va la cuenta.
+10. **Checklist de puesta en marcha**, paso a paso en la app, y los 5 errores más comunes que debo evitar al crear la cuenta.`}
+function apGen(){if(!all.filter(f=>(D[f[0]]||"").trim()).length){alert("Primero completa algunos datos en 'Mi marca': la cuenta se crea a partir de ella.");show(1);return}
+const L=brandL(),T=apCreate();
+const p=`Actúa como un estratega de marca personal y social media manager con más de 10 años de experiencia creando cuentas desde cero. Mantén siempre el tono, los valores y los objetivos de la marca.${L?`\n\n# PERFIL DE LA MARCA\n${L}`:""}\n\n# TAREA\n${T}\n\n# REGLAS\n- Responde en el idioma de la marca y con su tono.\n- Nada genérico: usa datos reales de la marca (servicios, audiencia, diferencial, frases típicas).\n- Entrega todo listo para copiar y pegar, sin explicaciones innecesarias.`;
+$("pre").textContent=p;$("out").classList.remove("hide");$("out").scrollIntoView({behavior:"smooth"})}
+$("gen5").onclick=()=>{if(apc=="c"){apGen();return}const h=igH(),L=brandL();if(!h){alert("Escribe tu usuario de Instagram.");return}
 const T=apPrompt({h,m:apm,p:$("ap_t").value});
 const p=`Actúa como un estratega de marca personal y social media manager con más de 10 años de experiencia. Mantén siempre el tono, los valores y los objetivos de la marca.${L?`\n\n# PERFIL DE LA MARCA\n${L}`:""}\n\n# TAREA\n${T}\n\n# REGLAS\n- Responde en el idioma de la marca y con su tono.\n- Nada genérico: usa datos reales del perfil (servicios, audiencia, diferencial, frases típicas).\n- Sé práctico: que pueda aplicarlo hoy mismo.`;
 $("pre").textContent=p;$("out").classList.remove("hide");$("out").scrollIntoView({behavior:"smooth"})};
